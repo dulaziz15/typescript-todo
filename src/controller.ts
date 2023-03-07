@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs/promises';
 
 // membuat interface Note
-interface Note{
+interface Note {
     id: number;
     title: string;
     description: string;
@@ -18,28 +18,28 @@ export const getAll = async(): Promise<Note[]> => {
 export const getById = async(id: number): Promise<Note> => {
     const noteList = await getAll();
     const note = noteList.find(note => note.id === id);
-    if(note){
+    if(note) {
         return note;
-    }else{
+    } else {
         throw new Error('tidak ada id');
     }
 }
 
-export const create = async(note: Note)=> {
+export const create = async(note: Note): Promise<void> => {
     const notelist = await getAll(); // mengambil semua data yang ada pada function getAll() ditampung dalam variable notelist
     await writeFile('./notes.json', JSON.stringify([...notelist, note])); // menulis data yang ada pada variable 
                                                                         //  notelist dan menambahkannya dengan parameter note yang berisi data sesuai dengan interface Note
     console.log("data berhasil dibuat");
 }
 
-export const removeById = async(id: number) => {
+export const removeById = async(id: number): Promise<void> => {
     const noteList = await getAll(); // mengambil semua data yang ada pada file notes.json
     const note = noteList.filter(note => note.id !== id); // filter data yang tidak sama dengan id dan ditampung dalam variablenote
     await writeFile('./notes.json', JSON.stringify(note)); // menulis data yang ada pada variable note yang telah difilter dan memasukan pada file notes.json
 }
 
-export const updatebyId = async(note: Partial<Note>) => {
-    if(!note.id){
+export const updatebyId = async(note: Partial<Note>): Promise<void> => {
+    if(!note.id) {
         throw new Error('parameter id tidak ada')
     }
 
